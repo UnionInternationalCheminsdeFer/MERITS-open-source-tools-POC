@@ -256,7 +256,7 @@ class SKDUPD_to_csv:
                 
     def SER(self,data):
         valeur=data[4:]
-        self.odi_en_cours['value']='S'+valeur
+        self.odi_en_cours['value']='F'+valeur
         self.liste_odi.append(self.odi_en_cours)
         self.new_odi_en_cours()
         
@@ -279,7 +279,7 @@ class SKDUPD_to_csv:
             self.liste_por[-1]=dic
             return
         valeur=data[4:]
-        self.odi_en_cours['value']='A'+valeur
+        self.odi_en_cours['value']='S'+valeur
         self.liste_odi.append(self.odi_en_cours)
         self.new_odi_en_cours()
             

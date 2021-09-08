@@ -151,9 +151,9 @@ class csv_to_SKDUPD:
                     txt+='ODI+'+uic1+'*'+uic2+'+'+start+'*'+end+"'\n"
                     
                 if value!='':
-                    if value[0]=='S':
+                    if value[0]=='F':
                         txt+="SER+"+value[1:]+"'\n"
-                    elif value[0]=='A':
+                    elif value[0]=='S':
                         txt+="ASD+"+value[1:]+"'\n"
                     elif value[0]=='T':
                         txt+="TFF+"+value[1:]+"'\n"
@@ -185,6 +185,7 @@ class csv_to_SKDUPD:
         self.dic_relation={}
         with open(path+'SKDUPD_RELATION.csv', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=';', quotechar='"')
+            
             #We ignore the first line
             next(reader) 
             for row in reader:
