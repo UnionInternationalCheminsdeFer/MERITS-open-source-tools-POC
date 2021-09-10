@@ -235,7 +235,7 @@ class TSDUPD_to_csv:
         return liste_finale
         
     def create_csv_file(self):
-        for file in glob.glob(self.path['edifact']+'*'):
+        for file in glob.glob(self.path['edifact']+'*.r'):
             if "TSDUPD" in file.upper():
                 print(file)
                 self.process_TSDUPD(file)
@@ -251,7 +251,7 @@ if __name__ == "__main__":
     path={}
     path['stops']='./XLSX/TSDUPD_STOPS.xlsx'
     path['prd']='./XLSX/TSDUPD_MCT.xlsx'
-    path['other_names']='./XLSX/TSDUPD_OTHER_NAMES.xlsx'
+    path['other_names']='./XLSX/TSDUPD_SYNONYMS.xlsx'
     path['other_informations']='./XLSX/TSDUPD_FOOTPATH.xlsx'
     path['edifact']='./TSDUPD/'
     tr=TSDUPD_to_csv(path)
