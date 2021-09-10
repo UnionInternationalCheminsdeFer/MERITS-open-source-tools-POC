@@ -2,13 +2,13 @@
 from openpyxl import load_workbook
 import datetime
 
-def header(first_date,last_date,today,org):
+def header(first_date,today,org):
     reference=today.strftime("%Y-%m-%dT%H%M%S")
     txt="UIB+UNOB:4+"+reference+"'\n"
     txt+="UIH+TSDUPD:D:04A+1+"+reference+"'\n"
     txt+="MSD+AAR:61'\n"
     txt+="ORG+"+org+"+++"+org+"'\n"
-    txt+="HDR+81+273:"+first_date+"/"+last_date+"*45:"+reference[:-2]+"+"+reference+"'\n"
+    txt+="HDR+81+273:"+first_date+"*45:"+reference[:-2]+"+"+reference+"'\n"
     return txt
 
 
@@ -19,11 +19,11 @@ def footer(nbr,today):
     return txt
 
 
-def header_footer(org,before,after,first_date,last_date):
+def header_footer(org,before,after,first_date):
     nbr=0
     writer=open(after,'w')
     today=datetime.datetime.now()
-    writer.write(header(first_date, last_date, today,org))
+    writer.write(header(first_date, today,org))
     with open(before) as reader:
             for nbr,line in enumerate(reader):
                 writer.write(line)
@@ -193,7 +193,6 @@ if __name__ == "__main__":
     
     tr.create_TSDUPD()
     org='0000'
-    begin_date="2021-01-01"
-    end_date="2021-12-12"
-    header_footer(org,"./NEW_TSDUPD/temp.r", "./NEW_TSDUPD/TSDUPD.r",begin_date ,end_date )
+    date="2021-01-01"
+    header_footer(org,"./NEW_TSDUPD/temp.r", "./NEW_TSDUPD/TSDUPD.r",date)
     print("Finished")
