@@ -44,8 +44,8 @@ class xlsx_to_TSDUPD:
         
     def create_TSDUPD(self):
         dic_relation={}
-        for line in self.ws_other_informations:
-            UIC1,UIC2,time,unit,rl1,rl2,ser,brand1,brand2,time2,provider1,provider2=line
+        for line in self.ws_other_informations.iter_rows(min_row=2):
+            UIC1,UIC2,time,unit,rl1,rl2,ser,brand1,brand2,provider1,provider2=line
             UIC1=UIC1.value
             UIC2=UIC2.value
             time=time.value
@@ -55,15 +55,14 @@ class xlsx_to_TSDUPD:
             ser=ser.value
             brand1=brand1.value
             brand2=brand2.value
-            time2=time2.value
             provider1=provider1.value
             provider2=provider2.value
             if UIC1 not in dic_relation:
                 dic_relation[UIC1]=[]
-            dic_relation[UIC1]=dic_relation[UIC1]+[(UIC2,time,unit,rl1,rl2,ser,brand1,brand2,time2,provider1,provider2)]
+            dic_relation[UIC1]=dic_relation[UIC1]+[(UIC2,time,unit,rl1,rl2,ser,brand1,brand2,provider1,provider2)]
         
         dic_prd={}
-        for line in self.ws_prd:
+        for line in self.ws_prd.iter_rows(min_row=2):
             UIC,service_brand1,service_brand2,connection_time,service_provider1,service_provider2=line
             UIC=UIC.value
             service_brand1=service_brand1.value
@@ -76,7 +75,7 @@ class xlsx_to_TSDUPD:
             dic_prd[UIC]=dic_prd[UIC]+[(service_brand1,service_brand2,connection_time,service_provider1,service_provider2)]
         
         dic_other_names={}
-        for line in self.ws_other_names:
+        for line in self.ws_other_names.iter_rows(min_row=2):
             UIC,country,name=line
             UIC=UIC.value
             country=country.value
@@ -86,15 +85,14 @@ class xlsx_to_TSDUPD:
             dic_other_names[UIC]=dic_other_names[UIC]+[(country,name)]
         
         
-        for line in self.ws_stops.rows:
-            typo,UIC,name,short_name,lat,lon,na,begin,end,delay,country,timezone,timezone2,resa=line
+        for line in self.ws_stops.iter_rows(min_row=2):
+            typo,UIC,name,short_name,lat,lon,begin,end,delay,country,timezone,timezone2,resa=line
             typo=typo.value
             UIC=UIC.value
             name=name.value
             short_name=short_name.value
             lat=lat.value
             lon=lon.value
-            na=na.value
             begin=begin.value
             end=end.value
             delay=delay.value
@@ -147,14 +145,14 @@ class xlsx_to_TSDUPD:
                 txt+='RFR+X01:'+resa+"'\n"
             PRD=False
             if UIC in dic_relation:
-                for UIC2,time,unit,rl1,rl2,ser,brand1,brand2,time2,provider1,provider2 in dic_relation[UIC]:
+                for UIC2,time,unit,rl1,rl2,ser,brand1,brand2,provider1,provider2 in dic_relation[UIC]:
                     if UIC2 not in [None,'','None']:
                      txt+='RFR+AWN:'+UIC2+"'\n"
                     if time not in [None,'','None']:
                         txt+='MES+'+time+':'+unit+"'\n"
                     if rl1  not in [None,'','None']:
                         txt+='RLS+'+rl1+'+'+rl2+"'\n"
-                    if brand1 or brand2 or time2 or provider1 or provider2 not in [None,'','None']:
+                    if brand1 or brand2 or provider1 or provider2 not in [None,'','None']:
                         txt+="PRD+:::"
                         PRD=True
                         if brand1 not in [None,'','None']:
@@ -162,8 +160,6 @@ class xlsx_to_TSDUPD:
                         txt+=':'
                         if brand2 not in [None,'','None']:
                             txt+=brand2
-                        if time2 not in [None,'','None']:
-                            txt+='::'+time2
                         if provider1 not in [None,'','None'] :
                              txt+='+'+provider1
                         elif provider2 not in [None,'','None']:
@@ -171,7 +167,6 @@ class xlsx_to_TSDUPD:
                         if provider2 not in [None,'','None']:
                             txt+='*'+provider2
                         txt+="'\n"
-                  
                         
                     if ser not in [None,'','None']:
                         if not PRD:

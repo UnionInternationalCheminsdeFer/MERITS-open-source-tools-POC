@@ -13,6 +13,10 @@ class TSDUPD_to_csv:
         self.ws_other_names = self.wb_other_names.active
         self.wb_other_informations = Workbook()
         self.ws_other_informations = self.wb_other_informations.active
+        self.ws_stop.append(['Function_Code','UIC_Code','Location_Name','Location_Short_Name','Latitude','Longitude','Valid_From','Valid_To','Default_Transfert_Time','Country','Timezone1','Timezone2','Reservation_Code'])
+        self.ws_other_informations.append(['UIC_Code1','UIC_Code2','Duration','Duration_Unit','13','6_footPath_or_14_Hierarchy','Attributes_with_semicolon','Service_Brand1','Service_Brand2','Service_Provider1','Service_Provider2'])
+        self.ws_other_names.append(['UIC_Code','Language','Synonym'])
+        self.ws_prd.append(['UIC_Code','Service_Brand1','Service_Brand2','Time','Service_Provider1','Service_Provider2'])
         self.inserer=False
         self.cpt_id=0
         self.max_tag=[]
@@ -24,7 +28,6 @@ class TSDUPD_to_csv:
                                  'SER+':'',
                                  'PRD+:::':'',
                                  'PRD+::::':'',
-                                 'PRD+::::::':'',
                                  'PRD++':'',
                                  'PRD++*':''
                                  }
@@ -74,14 +77,14 @@ class TSDUPD_to_csv:
                        'PRD++':'',
                        'PRD++*':''}
         self.info_stop={'ALS+':'', 'ALS++':'', 'ALS++:':'', 'IFT+X02':'','ALS+++':'', 'ALS++++':'', 
-                        'ALS+++++':'','273 POP+':'', 'begin':'','end':'', '87POP+':'', '87POP+:':'','CNY+':'','TIZ+':'','TIZ+:':'','RFR+X01':''}
+                        '273 POP+':'', 'begin':'','end':'', '87POP+':'', '87POP+:':'','CNY+':'','TIZ+':'','TIZ+:':'','RFR+X01':''}
         
     def write_sql(self):     
         if self.other_informations!=self.model and self.other_informations not in self.liste_other_informations:
             self.liste_other_informations.append(self.other_informations)
         
         tab_stops =[]
-        for X in ['ALS+', 'ALS++', 'ALS++:', 'IFT+X02','ALS+++', 'ALS++++', 'ALS+++++','begin','end','87POP+:','CNY+','TIZ+','TIZ+:','RFR+X01']:
+        for X in ['ALS+', 'ALS++', 'ALS++:', 'IFT+X02','ALS+++', 'ALS++++', 'begin','end','87POP+:','CNY+','TIZ+','TIZ+:','RFR+X01']:
             tab_stops.append(self.info_stop[X])
         UIC=self.info_stop['ALS++']
         self.ws_stop.append(tab_stops)
@@ -94,7 +97,7 @@ class TSDUPD_to_csv:
         for row in self.liste_other_informations:
             if row !=self.model:
                 tab=[UIC]
-                for X in ['RFR+:','MES+','MES+:','RLS+','RLS++','SER+','PRD+:::','PRD+::::','PRD+::::::','PRD++','PRD++*']:
+                for X in ['RFR+:','MES+','MES+:','RLS+','RLS++','SER+','PRD+:::','PRD+::::','PRD++','PRD++*']:
                     tab.append(row[X])
                 self.ws_other_informations.append(tab)        
         
@@ -186,7 +189,6 @@ class TSDUPD_to_csv:
         if self.other_informations!=self.model:
             if self.other_informations['PRD+:::']!='' \
             or self.other_informations['PRD+::::']!='' \
-            or self.other_informations['PRD+::::::']!='' \
             or self.other_informations['PRD++']!=''\
             or self.other_informations['PRD++*']!='':
                 self.liste_other_informations.append(self.other_informations)
