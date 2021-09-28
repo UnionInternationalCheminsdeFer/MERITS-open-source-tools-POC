@@ -5,10 +5,10 @@ import glob
 class SKDUPD_to_csv:
     def __init__(self,path):
         self.path=path
-        self.fichier_odi=open(path['odi'],'w')
-        self.fichier_por=open(path['por'],'w')
-        self.fichier_train=open(path['train'],'w')
-        self.fichier_relation=open(path['relation'],'w')
+        self.fichier_odi=open(path['odi'],'w',encoding='utf-8')
+        self.fichier_por=open(path['por'],'w',encoding='utf-8')
+        self.fichier_train=open(path['train'],'w',encoding='utf-8')
+        self.fichier_relation=open(path['relation'],'w',encoding='utf-8')
         self.fichier_train.write('ID;Service_number;Reservation;Tariff;Service_Mode;Service_Name;Service_Provider;not_used;Reservation_system;First_day;Last_day;Operation_days;Second_service_number\n')
         self.fichier_por.write('ID;Stop_number;UIC;Arrival_time;Arrival_offset;Departure_time;Departure_offset;Platform_arrival;Platform_departure;Stop_property;Traffic_restriction;Distance;Loading_vehicles;Unloading_vehicles;check_out;check_in\n')
         self.fichier_relation.write('ID;Stop_number;Service;Relation;Transfer_time;Certainty\n')
