@@ -111,6 +111,14 @@ class TSDUPD_to_csv:
                 for X in ['PRD+:::','PRD+::::','PRD+::::::','PRD++','PRD++*']:
                     tab.append(row[X])
                 self.ws_prd.append(tab)
+                
+    def unescape(self,valeur):
+        valeur=valeur.replace('?:',':')
+        valeur=valeur.replace('?+','+')
+        valeur=valeur.replace('?*','*')
+        valeur=valeur.replace("?'","'")
+        valeur=valeur.replace("??","?")
+        return valeur
     
     def ALS(self,line):
         if self.inserer:
@@ -120,6 +128,7 @@ class TSDUPD_to_csv:
         self.new_stop()
         champs=self.process_line(line)
         for tag,valeur in champs:
+            valeur=self.unescape(valeur)
             self.info_stop[tag]=valeur
         self.sql_stops=""
         self.sql_relations = ""
@@ -153,13 +162,16 @@ class TSDUPD_to_csv:
     
     def IFT(self,line):
         if "IFT+X02+" in line:
-            self.info_stop['IFT+X02']=line.split('+')[-1]
+            name=line.split('+')[-1]
+            name=self.unescape(name)
+            self.info_stop['IFT+X02']=name
         elif "IFT+AGW" in line:
             if ":" not in line:
                 country=''
                 name=line.split('+')[-1]
             else:
                 country,name=line.split(':')[-1].split('+')
+            name=self.unescape(name)
             self.other_names.append([country,name])
             
     def MES(self,line):
@@ -213,8 +225,9 @@ class TSDUPD_to_csv:
     def process_line(self,data):
         tag=data[:4]
         data=data[4:]
-        data=data.replace('?*','²')
-        data=data.replace('?+','¤')
+        data=data.replace('?*','◆')
+        data=data.replace('?+','◇')
+        data=data.replace('?:','❖')
         liste_finale=[]
         data=[i.split(':') for i in data.split('+')]   
         for Xcpt,X in enumerate(data):
@@ -225,13 +238,15 @@ class TSDUPD_to_csv:
                     dat=Y.split('*')
                     for Z in dat:
                         if Z!='':
-                            Z=Z.replace('²','?*')
-                            Z=Z.replace('¤','?+')
+                            Z=Z.replace('◆','?*')
+                            Z=Z.replace('◇','?+')
+                            Z=Z.replace('❖','?+')
                             liste_finale.append((cle,Z))
                         cle=cle+'*'
                 elif Y!='':
-                    Y=Y.replace('²','?*')
-                    Y=Y.replace('¤','?+')
+                    Y=Y.replace('◆','?*')
+                    Y=Y.replace('◇','?+')
+                    Y=Y.replace('❖','?+')
                     liste_finale.append((cle,Y))
                 cle=cle+':'
         return liste_finale

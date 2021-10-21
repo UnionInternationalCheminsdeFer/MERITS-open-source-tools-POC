@@ -114,6 +114,14 @@ class TSDUPD_to_csv:
                     tab.append(row[X])
                 self.ws_prd.writerow(tab)
     
+    def unescape(self,valeur):
+        valeur=valeur.replace('?:',':')
+        valeur=valeur.replace('?+','+')
+        valeur=valeur.replace('?*','*')
+        valeur=valeur.replace("?'","'")
+        valeur=valeur.replace("??","?")
+        return valeur
+    
     def ALS(self,line):
         if self.inserer:
             self.write_sql()
@@ -122,6 +130,7 @@ class TSDUPD_to_csv:
         self.new_stop()
         champs=self.process_line(line)
         for tag,valeur in champs:
+            valeur=self.unescape(valeur)
             self.info_stop[tag]=valeur
         self.sql_stops=""
         self.sql_relations = ""
@@ -155,13 +164,16 @@ class TSDUPD_to_csv:
     
     def IFT(self,line):
         if "IFT+X02+" in line:
-            self.info_stop['IFT+X02']=line.split('+')[-1]
+            name=line.split('+')[-1]
+            name=self.unescape(name)
+            self.info_stop['IFT+X02']=name
         elif "IFT+AGW" in line:
             if ":" not in line:
                 country=''
                 name=line.split('+')[-1]
             else:
                 country,name=line.split(':')[-1].split('+')
+            name=self.unescape(name)
             self.other_names.append([country,name])
             
     def MES(self,line):

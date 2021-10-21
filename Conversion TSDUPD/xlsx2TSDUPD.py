@@ -42,6 +42,16 @@ class xlsx_to_TSDUPD:
         self.ws_other_informations = self.wb_other_informations.active
         self.edifact=open(self.path['edifact'],'w')
         
+    def escape(self,valeur):
+        if valeur==None:
+            return valeur
+        valeur=valeur.replace("?","??")
+        valeur=valeur.replace(':','?:')
+        valeur=valeur.replace('+','?+')
+        valeur=valeur.replace('*','?*')
+        valeur=valeur.replace("'","?'")
+        return valeur
+        
     def create_TSDUPD(self):
         dic_relation={}
         for line in self.ws_other_informations.iter_rows(min_row=2):
@@ -79,7 +89,7 @@ class xlsx_to_TSDUPD:
             UIC,country,name=line
             UIC=UIC.value
             country=country.value
-            name=name.value
+            name=self.escape(name.value)
             if UIC not in dic_other_names:
                 dic_other_names[UIC]=[]
             dic_other_names[UIC]=dic_other_names[UIC]+[(country,name)]
@@ -89,8 +99,8 @@ class xlsx_to_TSDUPD:
             typo,UIC,name,short_name,lat,lon,begin,end,delay,country,timezone,timezone2,resa=line
             typo=typo.value
             UIC=UIC.value
-            name=name.value
-            short_name=short_name.value
+            name=self.escape(name.value)
+            short_name=self.escape(short_name.value)
             lat=lat.value
             lon=lon.value
             begin=begin.value

@@ -42,6 +42,16 @@ class csv_to_TSDUPD:
         self.ws_other_names = csv.reader(self.f_other_names, delimiter=';')
         self.ws_other_informations = csv.reader(self.f_other_informations, delimiter=';')
         
+    def escape(self,valeur):
+        if valeur==None:
+            return valeur
+        valeur=valeur.replace("?","??")
+        valeur=valeur.replace(':','?:')
+        valeur=valeur.replace('+','?+')
+        valeur=valeur.replace('*','?*')
+        valeur=valeur.replace("'","?'")
+        return valeur
+        
 
         
     def create_TSDUPD(self):
@@ -62,15 +72,17 @@ class csv_to_TSDUPD:
         dic_other_names={}
         for line in self.ws_other_names:
             UIC,country,name=line
+            name=self.escape(name)
             if UIC not in dic_other_names:
                 dic_other_names[UIC]=[]
             dic_other_names[UIC]=dic_other_names[UIC]+[(country,name)]
         
-        #We pass the header
+        #We ignore the header
         next(self.ws_stops) 
         for line in self.ws_stops:
             typo,UIC,name,short_name,lat,lon,begin,end,delay,country,timezone,timezone2,resa=line
-            
+            name=self.escape(name)
+            short_name=self.escape(short_name)
             txt='ALS+'+typo+'+'+UIC+':'+name
             if lat not in [None,'','None'] and lon not in [None,'','None']:
                 txt+='+'+lat+'+'+lon
