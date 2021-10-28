@@ -14,8 +14,7 @@ Create 3 directories named : TSDUPD, XLSX, NEW_TSDUPD
 Copy a TSDUPD file in the TSDUPD directory
 
 TSDUPD2xlsx.py will read the TSDUDP directory and create the excel files in the XLSX directory
-
-TSDUPD2xlsx.py will read the XLSX directory and create a TSDUPD file in the NEW_TSDUPD directory
+xlsx2TSDUPD.py will read the XLSX directory and create a TSDUPD file in the NEW_TSDUPD directory
 
 **/!\ Warning : When editing the excel files, always force the format to text only !**
 
