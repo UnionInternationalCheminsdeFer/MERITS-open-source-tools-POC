@@ -54,4 +54,4 @@ Copy the GTFS files in the GTFS directory
 
 Create the mapping files for agency and stops
 
-GTFS2edifact.py will read the GTFS directory and create a new SKDUPD file in the NEW_SKDUPD directory
+GTFS2SKDUPD.py will read the GTFS directory and create a new SKDUPD file in the NEW_SKDUPD directory
