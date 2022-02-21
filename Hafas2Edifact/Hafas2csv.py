@@ -78,8 +78,6 @@ class HAFAS2EDIFACT:
         information_arrival=line[29]
         information_departure=line[36]
         if information_arrival=='-' and information_departure=='-':
-            if self.ID == 5526:
-                    print(line,self.ID,self.por_pos)
             return
         
         self.por_pos+=1
